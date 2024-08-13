@@ -1,0 +1,35 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id           String  @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fullname     String  @map("fullname") @db.VarChar(32)
+  email        String  @unique @map("email")@db.VarChar(32)
+  password     String  @map("password")
+  profileImage String @map("profile_image")
+
+  todos Todos[]
+
+  @@id([id])
+  @@map("users")
+}
+
+model Todos {
+  id          String  @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String @map("user_id") @db.Uuid
+  title       String @map("title")
+  description String @map("description")
+
+  user Users @relation(references: [id], fields: [userId], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id])
+  @@map("todos")
+}
