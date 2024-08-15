@@ -58,7 +58,7 @@ export class TodosService {
   }
 
   async remove(id: string) {
-    await this.findOne(id); // Ensure the todo exists
+    await this.findOne(id); 
     await this.prisma.todos.delete({ where: { id } });
     return `Todo successfully removed`;
   }
